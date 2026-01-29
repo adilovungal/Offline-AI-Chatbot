@@ -1,95 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Offline AI Chatbot</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      font-family: "Segoe UI", sans-serif;
     }
 
     .chat-container {
-      width: 400px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 420px;
+      height: 560px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     .chat-header {
-      padding: 12px;
-      background: #4f46e5;
+      padding: 16px;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
       color: white;
-      border-radius: 10px 10px 0 0;
       text-align: center;
-      font-weight: bold;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .chat-subtitle {
+      font-size: 12px;
+      opacity: 0.9;
     }
 
     .chat-box {
-      padding: 10px;
-      height: 300px;
+      flex: 1;
+      padding: 14px;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      background: #f8fafc;
     }
 
     .message {
-      padding: 8px 12px;
-      border-radius: 15px;
       max-width: 80%;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      border-radius: 16px;
       font-size: 14px;
+      line-height: 1.4;
+      animation: fadeIn 0.25s ease-in;
     }
 
     .user {
-      background: #e0e7ff;
-      align-self: flex-end;
+      background: #4f46e5;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
     }
 
     .bot {
-      background: #f1f5f9;
-      align-self: flex-start;
+      background: white;
+      color: #1f2937;
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
     .input-area {
       display: flex;
-      border-top: 1px solid #ddd;
+      padding: 10px;
+      border-top: 1px solid #e5e7eb;
+      background: white;
     }
 
     input {
       flex: 1;
-      border: none;
-      padding: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
       outline: none;
+      font-size: 14px;
     }
 
     button {
+      margin-left: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
       border: none;
-      padding: 10px 15px;
       background: #4f46e5;
       color: white;
+      font-weight: 500;
       cursor: pointer;
     }
 
     button:hover {
       background: #4338ca;
     }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="chat-container">
-    <div class="chat-header">Offline AI Chatbot</div>
+    <div class="chat-header">
+      Offline AI Chatbot
+      <div class="chat-subtitle">Powered by local open-source LLM</div>
+    </div>
 
     <div id="chat" class="chat-box"></div>
 
     <div class="input-area">
-      <input id="msg" placeholder="Type a message..." />
+      <input id="msg" placeholder="Ask me anything..." />
       <button onclick="send()">Send</button>
     </div>
   </div>
@@ -102,7 +143,6 @@
 
       const chat = document.getElementById("chat");
 
-      // User message
       const userDiv = document.createElement("div");
       userDiv.className = "message user";
       userDiv.innerText = message;
@@ -111,10 +151,9 @@
       input.value = "";
       chat.scrollTop = chat.scrollHeight;
 
-      // Bot placeholder
       const botDiv = document.createElement("div");
       botDiv.className = "message bot";
-      botDiv.innerText = "Thinking...";
+      botDiv.innerText = "Thinking…";
       chat.appendChild(botDiv);
       chat.scrollTop = chat.scrollHeight;
 
@@ -128,9 +167,10 @@
       botDiv.innerText = data.reply;
       chat.scrollTop = chat.scrollHeight;
     }
+
     document.getElementById("msg").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") send();
-});
+      if (e.key === "Enter") send();
+    });
   </script>
 </body>
 </html>
