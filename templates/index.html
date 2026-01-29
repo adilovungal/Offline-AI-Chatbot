@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Offline AI Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 400px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 12px;
+      background: #4f46e5;
+      color: white;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .chat-box {
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .message {
+      padding: 8px 12px;
+      border-radius: 15px;
+      max-width: 80%;
+      font-size: 14px;
+    }
+
+    .user {
+      background: #e0e7ff;
+      align-self: flex-end;
+    }
+
+    .bot {
+      background: #f1f5f9;
+      align-self: flex-start;
+    }
+
+    .input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      outline: none;
+    }
+
+    button {
+      border: none;
+      padding: 10px 15px;
+      background: #4f46e5;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #4338ca;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="chat-container">
+    <div class="chat-header">Offline AI Chatbot</div>
+
+    <div id="chat" class="chat-box"></div>
+
+    <div class="input-area">
+      <input id="msg" placeholder="Type a message..." />
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    async function send() {
+      const input = document.getElementById("msg");
+      const message = input.value.trim();
+      if (!message) return;
+
+      const chat = document.getElementById("chat");
+
+      // User message
+      const userDiv = document.createElement("div");
+      userDiv.className = "message user";
+      userDiv.innerText = message;
+      chat.appendChild(userDiv);
+
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
+
+      // Bot placeholder
+      const botDiv = document.createElement("div");
+      botDiv.className = "message bot";
+      botDiv.innerText = "Thinking...";
+      chat.appendChild(botDiv);
+      chat.scrollTop = chat.scrollHeight;
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+      botDiv.innerText = data.reply;
+      chat.scrollTop = chat.scrollHeight;
+    }
+    document.getElementById("msg").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") send();
+});
+  </script>
+</body>
+</html>
